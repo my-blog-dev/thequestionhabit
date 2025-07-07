@@ -191,6 +191,47 @@
         grid-template-columns: 1fr;
       }
     }
+    .full-width-section {
+  width: 100%;
+  padding: 4rem 2rem;
+}
+
+.full-width-section .section-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.how-it-works {
+  background-color: var(--text-primary);
+  color: white;
+}
+    .get-started {
+  background-color: var(--text-primary);
+  color: white;
+  padding: 4rem 2rem;
+}
+
+.get-started input[type="email"] {
+  padding: 1rem;
+  border-radius: 0;
+  border: none;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
+}
+
+.get-started button {
+  background-color: var(--mist);
+  color: white;
+  padding: 1rem;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
   </style>
 </head>
 <body>
@@ -211,7 +252,7 @@
         </div>
         <div class="card">
           <h3>Simple & Powerful</h3>
-          <p>Just 5 minutes Weekly. One question. Whether it's "What does success mean to me?" or "How can I simplify today?" — small questions create big transformations.</p>
+          <p>Just 5 minutes weekly. One question. Whether it's "What does success mean to me?" or "How can I simplify today?" — small questions create big transformations.</p>
         </div>
         <div class="card">
           <h3>Transform Your Life</h3>
@@ -219,23 +260,26 @@
         </div>
       </div>
 
-      <section class="process">
-        <h2>How It Works</h2>
-        <div class="process-steps">
-          <div class="step">
-            <h4>1. Choose Your Question</h4>
-            <p>Select from our curated prompts or create your own thoughtful question.</p>
-          </div>
-          <div class="step">
-            <h4>2. Reflect & Explore</h4>
-            <p>Spend a few minutes thinking, journaling, or discussing your question.</p>
-          </div>
-          <div class="step">
-            <h4>3. Grow & Repeat</h4>
-            <p>Build the habit weekly and watch your curiosity and insights multiply.</p>
-          </div>
-        </div>
-      </section>
+     <section class="full-width-section how-it-works">
+  <div class="section-content">
+    <h2>How It Works</h2>
+    <div class="process-steps">
+      <div class="step">
+        <h4>1. Choose Your Question</h4>
+        <p>Select from our curated prompts or create your own thoughtful question.</p>
+      </div>
+      <div class="step">
+        <h4>2. Reflect & Explore</h4>
+        <p>Spend a few minutes thinking, journaling, or discussing your question.</p>
+      </div>
+      <div class="step">
+        <h4>3. Grow & Repeat</h4>
+        <p>Build the habit daily and watch your curiosity and insights multiply.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       <div class="stats">
         <div class="stat">
@@ -252,11 +296,18 @@
         </div>
       </div>
 
-      <section id="get-started" class="card" style="text-align: center; margin-top: 4rem;">
-        <h3>Ready to Start?</h3>
-        <p style="margin-bottom: 2rem;">Join others who've transformed their thinking through weekly questions. Get your free starter kit with 30 powerful questions to begin your journey.</p>
-        <a href="#" class="cta-button">Get Free Starter Kit</a>
-      </section>
+    <section class="full-width-section get-started">
+  <div class="section-content" style="text-align: center;">
+    <h3 style="font-size: 2.75rem;">Ready to Start?</h3>
+    <p>Join others who've transformed their thinking through daily questions. Get your free starter kit with 30 powerful questions to begin your journey.</p>
+    <form>
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="Enter your email" required />
+      <button type="submit">Confirm</button>
+    </form>
+  </div>
+</section>
+
     </div>
   </main>
 
