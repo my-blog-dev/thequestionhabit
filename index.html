@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Blog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+    }
+    header {
+      background: #222;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 1rem;
+    }
+    .search-box {
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .search-box input {
+      padding: 0.5rem;
+      width: 60%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .tags {
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .tag {
+      display: inline-block;
+      background: #ddd;
+      padding: 5px 10px;
+      margin: 3px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .post {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .post h2 {
+      margin: 0;
+    }
+    .post p {
+      color: #555;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 2rem;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 10px;
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .comments {
+      margin-top: 2rem;
+    }
+    .comments textarea {
+      width: 100%;
+      height: 60px;
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .comments button {
+      margin-top: 5px;
+      padding: 0.5rem 1rem;
+      border: none;
+      background: #222;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .comment {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      background: #eee;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>My Blog</h1>
+</header>
+
+<div class="container">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search blog posts...">
+  </div>
+
+  <div class="tags" id="tagList"></div>
+
+  <div id="post-list"></div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h2 id="modal-title"></h2>
+    <p id="modal-body"></p>
+
+    <div class="comments">
+      <h3>Comments</h3>
+      <textarea id="commentInput" placeholder="Write a comment..."></textarea>
+      <button onclick="addComment()">Post</button>
+      <div id="commentList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const posts = [
+    {
+      id: 1,
+      title: "Welcome to My Blog",
+      excerpt: "This is a quick summary of the first post.",
+      body: "Here is the full content of my very first blog post. I'm excited to share more soon!",
+      tags: ["intro", "welcome"]
+    },
+    {
+      id: 2,
+      title: "Why I Started Blogging",
+      excerpt: "Some thoughts behind this blog...",
+      body: "I started this blog to express my thoughts, learn in public, and build a community of curious minds.",
+      tags: ["motivation", "story"]
+    }
+  ];
+
+  let currentPostId = null;
+
+  const postList = document.getElementById("post-list");
+  const tagList = document.getElementById("tagList");
+
+  function renderPosts(filteredPosts = posts) {
+    postList.innerHTML = "";
+    filteredPosts.forEach((post, index) => {
+      const postDiv = document.createElement("div");
+      postDiv.className = "post";
+      postDiv.onclick = () => openModal(post.id);
+      postDiv.innerHTML = `
+        <h2>${post.title}</h2>
+        <p>${post.excerpt}</p>
+      `;
+      postList.appendChild(postDiv);
+    });
+  }
+
+  function openModal(id) {
+    const post = posts.find(p => p.id === id);
+    currentPostId = id;
+    document.getElementById("modal-title").textContent = post.title;
+    document.getElementById("modal-body").textContent = post.body;
+    document.getElementById("modal").style.display = "block";
+    renderComments();
+  }
+
+  function closeModal() {
+    document.getElementById("modal").style.display = "none";
+  }
+
+  function addComment() {
+    const input = document.getElementById("commentInput");
+    const commentText = input.value.trim();
+    if (!commentText) return;
+
+    const comments = JSON.parse(localStorage.getItem("comments") || "{}");
+    if (!comments[currentPostId]) comments[currentPostId] = [];
+    comments[currentPostId].push(commentText);
+    localStorage.setItem("comments", JSON.stringify(comments));
+
+    input.value = "";
+    renderComments();
+  }
+
+  function renderComments() {
+    const comments = JSON.parse(localStorage.getItem("comments") || "{}")[currentPostId] || [];
+    const commentList = document.getElementById("commentList");
+    commentList.innerHTML = "";
+    comments.forEach(c => {
+      const div = document.createElement("div");
+      div.className = "comment";
+      div.textContent = c;
+      commentList.appendChild(div);
+    });
+  }
+
+  function renderTags() {
+    const allTags = new Set();
+    posts.forEach(p => p.tags.forEach(tag => allTags.add(tag)));
+    tagList.innerHTML = "";
+    allTags.forEach(tag => {
+      const tagBtn = document.createElement("span");
+      tagBtn.className = "tag";
+      tagBtn.textContent = tag;
+      tagBtn.onclick = () => {
+        const filtered = posts.filter(p => p.tags.includes(tag));
+        renderPosts(filtered);
+      };
+      tagList.appendChild(tagBtn);
+    });
+  }
+
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const term = this.value.toLowerCase();
+    const filtered = posts.filter(post => post.title.toLowerCase().includes(term) || post.body.toLowerCase().includes(term));
+    renderPosts(filtered);
+  });
+
+  // Initial render
+  renderPosts();
+  renderTags();
+</script>
+
+</body>
+</html>
